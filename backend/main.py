@@ -30,6 +30,25 @@ class AlertLineChart(Resource):
         f.close()
         return data
 
+class SummaryCell(Resource):
+    def get(self):
+        counter = {
+            'informational': 0,
+            'low': 0,
+            'medium': 0,
+            'high': 0,
+            'critical': 0
+        }
+        f = open('alert_result.json', 'r')
+        data = json.load(f)
+        for record in data['result']:
+            print(record)
+            for key, value in record['result'].items():
+                if (value is not None):
+                    counter[key] += value
+        return counter
+
+
 class RenewData(Resource):
     def get(self):
         refresh_alert()
@@ -40,6 +59,7 @@ class RenewData(Resource):
 # api.add_resource(column_chart, "/daily")
 api.add_resource(AlertLineChart, "/linechart")
 api.add_resource(RenewData, "/refresh")
+api.add_resource(SummaryCell, "/summary")
 
 if __name__ == "__main__":
     app.run(port=5000, debug=True, use_reloader=False)
