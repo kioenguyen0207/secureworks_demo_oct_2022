@@ -2,6 +2,7 @@ from calendar import week
 from flask import Flask, jsonify, request, Response
 from flask_restful import Api, Resource, reqparse
 from flask_apscheduler import APScheduler
+from flask_cors import CORS
 
 from alert_api import refresh_alert
 import json
@@ -11,6 +12,7 @@ class Config:
 
 app = Flask(__name__)
 api = Api(app)
+CORS(app)
 scheduler = APScheduler()
 scheduler.init_app(app)
 app.config.from_object(Config())
