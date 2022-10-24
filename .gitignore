@@ -1,3 +1,5 @@
 __pycache__
 .env
 alert_result.json
+assets_sample_data.json
+assets_result.json

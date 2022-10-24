@@ -5,6 +5,7 @@ from flask_apscheduler import APScheduler
 from flask_cors import CORS
 
 from alert_api import refresh_alert
+from assets_api import refresh_assets
 import json
 
 class Config:
@@ -21,6 +22,7 @@ app.config.from_object(Config())
 def refresh_alert_data():
     print('Refresh progress is running...')
     refresh_alert()
+    refresh_assets()
     print('Refreshed!!!')
 
 scheduler.start()
@@ -28,6 +30,13 @@ scheduler.start()
 class AlertLineChart(Resource):
     def get(self):
         f = open('alert_result.json', 'r')
+        data = json.load(f)
+        f.close()
+        return data
+
+class AssetsPieChart(Resource):
+    def get(self):
+        f = open('assets_result.json', 'r')
         data = json.load(f)
         f.close()
         return data
@@ -54,6 +63,7 @@ class SummaryCell(Resource):
 class RenewData(Resource):
     def get(self):
         refresh_alert()
+        refresh_assets()
         return {
             'status': 'OK'
         }
@@ -62,6 +72,7 @@ class RenewData(Resource):
 api.add_resource(AlertLineChart, "/linechart")
 api.add_resource(RenewData, "/refresh")
 api.add_resource(SummaryCell, "/summary")
+api.add_resource(AssetsPieChart, "/piechart")
 
 if __name__ == "__main__":
     app.run(port=5000, debug=True, use_reloader=False)
