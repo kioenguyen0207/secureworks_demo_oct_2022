@@ -58,11 +58,17 @@ def refresh_assets():
         result_tags[tag['tag']] += 1
       elif tag['tag'] is not None:
         result_tags[tag['tag']] = 1
-  
+
   result = {}
   result['total_hostnames'] = len(result_hostnames.keys())
   result['total_tags'] = len(result_tags.keys())
-  result['data'] = result_tags
+  formatted_result_tags = []
+  for key, value in result_tags.items():
+    formatted_result_tags.append({
+      'key': key,
+      'value': value
+    })
+  result['data'] = formatted_result_tags
 
   json_load = json.loads(json.dumps(result))
   with open("assets_result.json", "w") as outfile:

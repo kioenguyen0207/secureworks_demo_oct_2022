@@ -3,3 +3,5 @@ __pycache__
 alert_result.json
 assets_sample_data.json
 assets_result.json
+detector_sample.json
+scorecard_result.json
