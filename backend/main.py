@@ -4,9 +4,11 @@ from flask_restful import Api, Resource, reqparse
 from flask_apscheduler import APScheduler
 from flask_cors import CORS
 
-from alert_api import refresh_alert
+from alert_api import refresh_alert, refresh_alert_by_detector
 from assets_api import refresh_assets
+from scorecard import refresh_scorecard
 import json
+import time
 
 class Config:
     SCHEDULER_API_ENABLED = True
@@ -23,6 +25,8 @@ def refresh_alert_data():
     print('Refresh progress is running...')
     refresh_alert()
     refresh_assets()
+    refresh_scorecard()
+    refresh_alert_by_detector()
     print('Refreshed!!!')
 
 scheduler.start()
@@ -37,6 +41,13 @@ class AlertLineChart(Resource):
 class AssetsPieChart(Resource):
     def get(self):
         f = open('assets_result.json', 'r')
+        data = json.load(f)
+        f.close()
+        return data
+
+class ScoreCardDoughnut(Resource):
+    def get(self):
+        f = open('scorecard_result.json', 'r')
         data = json.load(f)
         f.close()
         return data
@@ -62,17 +73,22 @@ class SummaryCell(Resource):
 
 class RenewData(Resource):
     def get(self):
+        start = time.time()
         refresh_alert()
         refresh_assets()
+        refresh_scorecard()
+        refresh_alert_by_detector()
+        end = time.time()
         return {
-            'status': 'OK'
+            'status': 'OK',
+            'time': end - start
         }
 
-# api.add_resource(column_chart, "/daily")
 api.add_resource(AlertLineChart, "/linechart")
 api.add_resource(RenewData, "/refresh")
 api.add_resource(SummaryCell, "/summary")
 api.add_resource(AssetsPieChart, "/piechart")
+api.add_resource(ScoreCardDoughnut, "/doughnutchart")
 
 if __name__ == "__main__":
     app.run(port=5000, debug=True, use_reloader=False)
