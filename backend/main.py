@@ -45,6 +45,13 @@ class AssetsPieChart(Resource):
         f.close()
         return data
 
+class DetectorPieChart(Resource):
+    def get(self):
+        f = open('detector_result.json', 'r')
+        data = json.load(f)
+        f.close()
+        return data
+
 class ScoreCardDoughnut(Resource):
     def get(self):
         f = open('scorecard_result.json', 'r')
@@ -89,6 +96,7 @@ api.add_resource(RenewData, "/refresh")
 api.add_resource(SummaryCell, "/summary")
 api.add_resource(AssetsPieChart, "/piechart")
 api.add_resource(ScoreCardDoughnut, "/doughnutchart")
+api.add_resource(DetectorPieChart, "/piechart2")
 
 if __name__ == "__main__":
     app.run(port=5000, debug=True, use_reloader=False)
