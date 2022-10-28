@@ -75,7 +75,15 @@ class SummaryCell(Resource):
             for key, value in record['result'].items():
                 if (value is not None):
                     counter[key] += value
-        return counter
+        result = []
+        for key, value in counter.items():
+            result.append({
+                'key': key,
+                'value': value
+            })
+        return {
+            'data': result
+        }
 
 
 class RenewData(Resource):
