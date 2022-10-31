@@ -9,6 +9,7 @@ from assets_api import refresh_assets
 from scorecard import refresh_scorecard
 import json
 import time
+from datetime import now
 
 class Config:
     SCHEDULER_API_ENABLED = True
@@ -22,12 +23,11 @@ app.config.from_object(Config())
 
 @scheduler.task('interval', id='refresh_alert_data', seconds=3600, misfire_grace_time=900)
 def refresh_alert_data():
-    print('Refresh progress is running...')
     refresh_alert()
     refresh_assets()
     refresh_scorecard()
     refresh_alert_by_detector()
-    print('Refreshed!!!')
+    print('Refreshedn at ' + datetime.now())
 
 scheduler.start()
 
@@ -71,7 +71,6 @@ class SummaryCell(Resource):
         f = open('alert_result.json', 'r')
         data = json.load(f)
         for record in data['result']:
-            print(record)
             for key, value in record['result'].items():
                 if (value is not None):
                     counter[key] += value
