@@ -9,7 +9,6 @@ from assets_api import refresh_assets
 from scorecard import refresh_scorecard
 import json
 import time
-from datetime import now
 
 class Config:
     SCHEDULER_API_ENABLED = True
@@ -27,8 +26,7 @@ def refresh_alert_data():
     refresh_assets()
     refresh_scorecard()
     refresh_alert_by_detector()
-    print('Refreshedn at ' + datetime.now())
-
+    print('Refreshed')
 scheduler.start()
 
 class AlertLineChart(Resource):
