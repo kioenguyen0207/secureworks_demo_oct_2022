@@ -63,11 +63,20 @@ def refresh_assets():
   result['total_hostnames'] = len(result_hostnames.keys())
   result['total_tags'] = len(result_tags.keys())
   formatted_result_tags = []
+  other_tags = 0
   for key, value in result_tags.items():
-    formatted_result_tags.append({
-      'key': key,
-      'value': value
-    })
+    if value<30:
+      other_tags += value
+      continue
+    else:
+      formatted_result_tags.append({
+        'key': key,
+        'value': value
+      })
+  formatted_result_tags.append({
+        'key': 'Others',
+        'value': other_tags
+      })
   result['data'] = formatted_result_tags
 
   json_load = json.loads(json.dumps(result))
