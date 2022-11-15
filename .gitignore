@@ -6,3 +6,5 @@ assets_result.json
 detector_sample.json
 scorecard_result.json
 detector_result.json
+credentials.json
+token.json

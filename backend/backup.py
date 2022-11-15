@@ -9,7 +9,8 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaFileUpload
 
-def backupData(folderName = str(datetime.now())):
+def backupData():
+  folderName = datetime.now()
   SCOPES = ["https://www.googleapis.com/auth/drive"]
   creds = None
   if os.path.exists("token.json"):
