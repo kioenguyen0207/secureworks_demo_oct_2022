@@ -9,6 +9,8 @@ from assets_api import refresh_assets
 from scorecard import refresh_scorecard
 import json
 import time
+from datetime import datetime
+from backup import backupData
 
 class Config:
     SCHEDULER_API_ENABLED = True
@@ -22,10 +24,31 @@ app.config.from_object(Config())
 
 @scheduler.task('interval', id='refresh_alert_data', seconds=3600, misfire_grace_time=900)
 def refresh_alert_data():
-    refresh_alert()
-    refresh_assets()
-    refresh_scorecard()
-    refresh_alert_by_detector()
+    now = datetime.now()
+    try:
+        refresh_alert()
+    except Exception as ex:
+        print(f"Refresh alert failed at {now}, error: " + str(ex))
+
+    try:
+        refresh_assets()
+    except Exception as ex:
+        print(f"Refresh asset failed at {now}, error: " + str(ex))
+
+    try:
+        refresh_scorecard()
+    except Exception as ex:
+        print(f"Refresh scorecard failed at {now}, error: " + str(ex))
+
+    try:
+        refresh_alert_by_detector()
+    except Exception as ex:
+        print(f"Refresh detector failed at {now}, error: " + str(ex))
+
+    try:
+        backupData()
+    except Exception as ex:
+        print(f"Backup data failed at {now}, error: " + str(ex))
     print('Refreshed')
 scheduler.start()
 
