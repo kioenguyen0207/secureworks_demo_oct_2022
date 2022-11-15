@@ -51,7 +51,9 @@ def backupData():
     file = service.files().create(body=file_metadata, fields="id").execute()
     folder_id = file.get('id')
 
-    for file in ['alert_result.json', 'assets_result.json', 'detector_result.json', 'scorecard_result.json']:
+    for file in ['alert_result.json', 'assets_result.json', 'detector_result.json', 'scorecard_result.json',
+      'alert_raw_critical.json', 'alert_raw_high.json', 'alert_raw_medium.json', 'alert_raw_low.json', 'alert_raw_informational.json',
+      'assets_raw.json', 'alert_raw.json', 'scorecard_raw.json']:
       file_metadata = {
         "name": file,
         "parents": [folder_id]

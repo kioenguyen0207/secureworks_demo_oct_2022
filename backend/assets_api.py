@@ -43,6 +43,8 @@ def refresh_assets():
   ''')
 
   data = json.loads(result)
+  with open("assets_raw.json", "w") as outfile:
+      json.dump(data, outfile)
 
   result_hostnames = {}
   for record in data['data']['allAssets']['assets']:

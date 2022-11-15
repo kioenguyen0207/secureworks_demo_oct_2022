@@ -107,6 +107,8 @@ def refresh_alert():
 
             r = oauth_client.post('https://api.ctpx.secureworks.com/graphql', json={"query": query})
             data = json.loads(r.content)
+            with open(f"alert_raw_{category}.json", "w") as outfile:
+                json.dump(data, outfile)
             if data["data"]["alertsServiceSearch"]["alerts"]["total_results"] is not None:
                 counter[category] = data["data"]["alertsServiceSearch"]["alerts"]["total_results"]
         recordValue['result'] = counter
@@ -198,6 +200,8 @@ def refresh_alert_by_detector():
 
     r = oauth_client.post('https://api.ctpx.secureworks.com/graphql', json={"query": query})
     data = json.loads(r.content)
+    with open("alert_raw.json", "w") as outfile:
+        json.dump(data, outfile)
     temp_result = {}
     for record in data["data"]["alertsServiceSearch"]["alerts"]["list"]:
         detector = record["metadata"]["creator"]["detector"]["detector_name"]
@@ -219,5 +223,4 @@ def refresh_alert_by_detector():
 
 
 if __name__ == "__main__":
-    # refresh_alert()
-    refresh_alert_by_detector()
+    refresh_alert()

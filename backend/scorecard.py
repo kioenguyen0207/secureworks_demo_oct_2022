@@ -14,6 +14,8 @@ def refresh_scorecard():
   }
   response = requests.get(url, headers=headers)
   json_load = json.loads(response.content)
+  with open("scorecard_raw.json", "w") as outfile:
+      json.dump(json_load, outfile)
   data = []
   for domain in json_load['entries']:
     data.append({
